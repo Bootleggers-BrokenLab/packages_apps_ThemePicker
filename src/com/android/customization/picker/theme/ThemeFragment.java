@@ -393,47 +393,6 @@ public class ThemeFragment extends ToolbarFragment {
                     previewInfo.shapeDrawable, previewInfo.shapeAppIcons, editClickListener,
                     mColorButtonIds, mColorTileIds, mColorTileIconIds, mShapeIconIds,
                     wallpaperListener, coverCardLayoutListener));
-            if (previewInfo.colorStyleBackgroundDark != -1 && previewInfo.colorStyleBackgroundLight != -1) {
-                addPage(new ThemePreviewPage(activity, R.string.preview_name_ui_style,
-                        R.drawable.ic_format_paint_24px, R.layout.preview_card_style_content,
-                        previewInfo.resolveAccentColor(res), previewInfo.resolveStyleBackgroundColor(res)) {
-                    @Override
-                    protected void bindBody(boolean forceRebind) {
-                        View v = card.findViewById(R.id.preview_styles);
-                        v.setBackgroundColor(backgroundColor);
-
-                        int controlGreyColor = res.getColor(R.color.control_grey);
-                        ColorStateList tintList = new ColorStateList(
-                                new int[][]{
-                                    new int[]{android.R.attr.state_selected},
-                                    new int[]{android.R.attr.state_checked},
-                                    new int[]{-android.R.attr.state_enabled},
-                                },
-                                new int[] {
-                                    accentColor,
-                                    accentColor,
-                                    controlGreyColor
-                                }
-                            );
-
-                        for (int i = 0; i < mColorButtonIds.length; i++) {
-                            CompoundButton button = card.findViewById(mColorButtonIds[i]);
-                            button.setButtonTintList(tintList);
-                        }
-
-                        Switch enabledSwitch = card.findViewById(R.id.preview_toggle_selected);
-                        enabledSwitch.setThumbTintList(tintList);
-                        enabledSwitch.setTrackTintList(tintList);
-
-                        ColorStateList seekbarTintList = ColorStateList.valueOf(accentColor);
-                        SeekBar seekbar = card.findViewById(R.id.preview_seekbar);
-                        seekbar.setThumbTintList(seekbarTintList);
-                        seekbar.setProgressTintList(seekbarTintList);
-                        seekbar.setProgressBackgroundTintList(seekbarTintList);
-                        // Disable seekbar
-                        seekbar.setOnTouchListener((view, motionEvent) -> true);                    }
-                });
-            }
             if (previewInfo.colorAccentDark != -1 && previewInfo.colorAccentLight != -1) {
                 addPage(new ThemePreviewPage(activity, R.string.preview_name_color_new,
                         R.drawable.ic_colorize_24px, R.layout.preview_card_color_content,
@@ -486,6 +445,48 @@ public class ThemeFragment extends ToolbarFragment {
                             ImageView fg = card.findViewById(mColorTileIconIds[i][0]);
                             fg.setImageDrawable(icon);
                         }
+                    }
+                });
+            }
+            if (previewInfo.colorStyleBackgroundDark != -1 && previewInfo.colorStyleBackgroundLight != -1) {
+                addPage(new ThemePreviewPage(activity, R.string.preview_name_ui_style,
+                        R.drawable.ic_format_paint_24px, R.layout.preview_card_style_content,
+                        previewInfo.resolveAccentColor(res), previewInfo.resolveStyleBackgroundColor(res)) {
+                    @Override
+                    protected void bindBody(boolean forceRebind) {
+                        View v = card.findViewById(R.id.preview_styles);
+                        v.setBackgroundColor(backgroundColor);
+
+                        int controlGreyColor = res.getColor(R.color.control_grey);
+                        ColorStateList tintList = new ColorStateList(
+                                new int[][]{
+                                    new int[]{android.R.attr.state_selected},
+                                    new int[]{android.R.attr.state_checked},
+                                    new int[]{-android.R.attr.state_enabled},
+                                },
+                                new int[] {
+                                    accentColor,
+                                    accentColor,
+                                    controlGreyColor
+                                }
+                            );
+
+                        for (int i = 0; i < mColorButtonIds.length; i++) {
+                            CompoundButton button = card.findViewById(mColorButtonIds[i]);
+                            button.setButtonTintList(tintList);
+                        }
+
+                        Switch enabledSwitch = card.findViewById(R.id.preview_toggle_selected);
+                        enabledSwitch.setThumbTintList(tintList);
+                        enabledSwitch.setTrackTintList(tintList);
+
+                        ColorStateList seekbarTintList = ColorStateList.valueOf(accentColor);
+                        SeekBar seekbar = card.findViewById(R.id.preview_seekbar);
+                        seekbar.setThumbTintList(seekbarTintList);
+                        seekbar.setProgressTintList(seekbarTintList);
+                        seekbar.setProgressBackgroundTintList(seekbarTintList);
+                        // Disable seekbar
+                        seekbar.setOnTouchListener((view, motionEvent) -> true);
                     }
                 });
             }
