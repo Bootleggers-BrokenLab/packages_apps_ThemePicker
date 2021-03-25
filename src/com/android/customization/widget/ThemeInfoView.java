@@ -59,9 +59,9 @@ public class ThemeInfoView extends LinearLayout {
 
         if (previewInfo != null) {
             mTitle.setText(getContext().getString(R.string.style_info_description));
-            if (previewInfo.headlineFontFamily != null) {
-                mTitle.setTypeface(previewInfo.headlineFontFamily);
-                mFontPreviewTextView.setTypeface(previewInfo.headlineFontFamily);
+            if (previewInfo.overallFontFamily != null) {
+                mTitle.setTypeface(previewInfo.overallFontFamily);
+                mFontPreviewTextView.setTypeface(previewInfo.overallFontFamily);
             }
 
             if (previewInfo.icons.get(WIFI_ICON_PREVIEW_INDEX) != null) {

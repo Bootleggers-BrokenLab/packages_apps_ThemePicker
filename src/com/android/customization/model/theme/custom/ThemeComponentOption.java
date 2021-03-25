@@ -105,15 +105,13 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
     public static class FontOption extends ThemeComponentOption {
 
         private final String mLabel;
-        private final Typeface mHeadlineFont;
-        private final Typeface mBodyFont;
+        private final Typeface mMainFont;
 
-        public FontOption(String packageName, String label, Typeface headlineFont,
-                Typeface bodyFont) {
-            addOverlayPackage(OVERLAY_CATEGORY_FONT, packageName);
-            mLabel = label;
-            mHeadlineFont = headlineFont;
-            mBodyFont = bodyFont;
+        public FontOption(String fontId, String fontName,
+                Typeface font) {
+            addOverlayPackage(OVERLAY_CATEGORY_FONT, fontId);
+            mLabel = fontName;
+            mMainFont = font;
         }
 
         @Override
@@ -124,7 +122,7 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
         @Override
         public void bindThumbnailTile(View view) {
             ((TextView) view.findViewById(R.id.thumbnail_text)).setTypeface(
-                    mHeadlineFont);
+                    mMainFont);
             view.setContentDescription(mLabel);
         }
 
@@ -154,19 +152,19 @@ public abstract class ThemeComponentOption implements CustomizationOption<ThemeC
                         cardBody, true);
             }
             TextView title = container.findViewById(R.id.font_card_title);
-            title.setTypeface(mHeadlineFont);
+            title.setTypeface(mMainFont);
             TextView header = container.findViewById(R.id.theme_preview_card_header);
             header.setText(String.format("%s\n(%s)",
                     container.getContext().getString(R.string.preview_name_font), mLabel));
             TextView bodyText = container.findViewById(R.id.font_card_body);
-            bodyText.setTypeface(mBodyFont);
+            bodyText.setTypeface(mMainFont);
             container.findViewById(R.id.font_card_divider).setBackgroundColor(
                     title.getCurrentTextColor());
         }
 
         @Override
         public Builder buildStep(Builder builder) {
-            builder.setHeadlineFontFamily(mHeadlineFont).setBodyFontFamily(mBodyFont);
+            builder.setOverallFont(mMainFont);
             return super.buildStep(builder);
         }
     }

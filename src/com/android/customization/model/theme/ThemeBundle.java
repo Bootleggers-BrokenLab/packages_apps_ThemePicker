@@ -104,7 +104,7 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
         Resources res = view.getContext().getResources();
 
         ((TextView) view.findViewById(R.id.theme_option_font)).setTypeface(
-                mPreviewInfo.headlineFontFamily);
+                mPreviewInfo.overallFontFamily);
         if (mPreviewInfo.shapeDrawable != null) {
             ((ShapeDrawable) mPreviewInfo.shapeDrawable).getPaint().setColor(
                     mPreviewInfo.resolveAccentColor(res));
@@ -259,8 +259,7 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
     }
 
     public static class PreviewInfo {
-        public final Typeface bodyFontFamily;
-        public final Typeface headlineFontFamily;
+        public final Typeface overallFontFamily;
         @ColorInt public final int colorAccentLight;
         @ColorInt public final int colorAccentDark;
         /**@ColorInt public final int colorStyleBackground;**/
@@ -292,13 +291,12 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
             }
         }
 
-        private PreviewInfo(Context context, Typeface bodyFontFamily, Typeface headlineFontFamily,
+        private PreviewInfo(Context context, Typeface overallFontFamily,
                 int colorAccentLight, int colorAccentDark, int colorStyleBackgroundLight, 
                 int colorStyleBackgroundDark, List<Drawable> icons,
                 Drawable shapeDrawable, @Dimension int cornerRadius,
                 List<ShapeAppIcon> shapeAppIcons) {
-            this.bodyFontFamily = bodyFontFamily;
-            this.headlineFontFamily = headlineFontFamily;
+            this.overallFontFamily = overallFontFamily;
             this.colorAccentLight = colorAccentLight;
             this.colorAccentDark = colorAccentDark;
             this.colorStyleBackgroundLight = colorStyleBackgroundLight;
@@ -329,8 +327,7 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
 
     public static class Builder {
         protected String mTitle;
-        private Typeface mBodyFontFamily;
-        private Typeface mHeadlineFontFamily;
+        private Typeface mOverallFontFamily;
         @ColorInt private int mColorAccentLight = -1;
         @ColorInt private int mColorAccentDark = -1;
         @ColorInt private int mColorStyleBackground = -1;
@@ -375,7 +372,7 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
                     //  non-adaptive icons
                 }
             }
-            return new PreviewInfo(context, mBodyFontFamily, mHeadlineFontFamily, mColorAccentLight,
+            return new PreviewInfo(context, mOverallFontFamily, mColorAccentLight,
                     mColorAccentDark, mColorStyleBackgroundLight, mColorStyleBackgroundDark,
                     mIcons, shapeDrawable, mCornerRadius, shapeIcons);
         }
@@ -393,13 +390,8 @@ public class ThemeBundle implements CustomizationOption<ThemeBundle> {
             return this;
         }
 
-        public Builder setBodyFontFamily(@Nullable Typeface bodyFontFamily) {
-            mBodyFontFamily = bodyFontFamily;
-            return this;
-        }
-
-        public Builder setHeadlineFontFamily(@Nullable Typeface headlineFontFamily) {
-            mHeadlineFontFamily = headlineFontFamily;
+        public Builder setOverallFont(@Nullable Typeface overallFontFamily) {
+            mOverallFontFamily = overallFontFamily;
             return this;
         }
 

@@ -3,10 +3,13 @@ package com.android.customization.model.theme;
 import static com.android.customization.model.ResourceConstants.ANDROID_PACKAGE;
 import static com.android.customization.model.ResourceConstants.CONFIG_CORNERRADIUS;
 import static com.android.customization.model.ResourceConstants.ICONS_FOR_PREVIEW;
+import static com.android.customization.model.ResourceConstants.OVERLAY_CATEGORY_FONT;
 import static com.android.customization.model.ResourceConstants.SETTINGS_PACKAGE;
 import static com.android.customization.model.ResourceConstants.SYSUI_PACKAGE;
 
 import android.content.Context;
+import android.content.FontInfo;
+import android.content.IFontService;
 import android.content.om.OverlayInfo;
 import android.content.om.OverlayManager;
 import android.content.pm.ApplicationInfo;
@@ -16,6 +19,8 @@ import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,6 +35,7 @@ import com.android.customization.model.theme.ThemeBundle.PreviewInfo.ShapeAppIco
 import com.android.wallpaper.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +47,18 @@ class OverlayThemeExtractor {
 
     private final Context mContext;
     private final Map<String, OverlayInfo> mOverlayInfos = new HashMap<>();
+    private IFontService mFontService;
+    private List<FontInfo> mFontInfo = new ArrayList<FontInfo>();
     // List of packages
     private final String[] mShapePreviewIconPackages;
 
     OverlayThemeExtractor(Context context) {
         mContext = context;
         OverlayManager om = context.getSystemService(OverlayManager.class);
+        /*mFontService = IFontService.Stub.asInterface(
+            context.getSystemService(FontService.class));*/
+        mFontService = IFontService.Stub.asInterface(
+            ServiceManager.getService("dufont"));
         if (om != null) {
             Consumer<OverlayInfo> addToMap = overlayInfo -> mOverlayInfos.put(
                     overlayInfo.getPackageName(), overlayInfo);
@@ -182,17 +194,37 @@ class OverlayThemeExtractor {
         }
     }
 
-    void addFontOverlay(Builder builder, String fontOverlayPackage)
+    void addFontById(Builder builder, String fontId)
             throws NameNotFoundException {
-        if (!TextUtils.isEmpty(fontOverlayPackage)) {
-            builder.addOverlayPackage(getOverlayCategory(fontOverlayPackage),
-                    fontOverlayPackage)
-                    .setBodyFontFamily(loadTypeface(
-                            ResourceConstants.CONFIG_BODY_FONT_FAMILY,
-                            fontOverlayPackage))
-                    .setHeadlineFontFamily(loadTypeface(
-                            ResourceConstants.CONFIG_HEADLINE_FONT_FAMILY,
-                            fontOverlayPackage));
+        if (!TextUtils.isEmpty(fontId)) {
+            mFontInfo.clear();
+            try {
+                Map<String, List<FontInfo>> fontMap = mFontService.getAllFonts();
+                for (Map.Entry<String, List<FontInfo>> entry : fontMap.entrySet()) {
+                    String packageName = entry.getKey();
+                    List<FontInfo> fonts = entry.getValue();
+                    // manually add system font after we sort
+                    if (TextUtils.equals(packageName, FontInfo.DEFAULT_FONT_PACKAGE)) {
+                        continue;
+                    }
+                    for (FontInfo font : fonts) {
+                        mFontInfo.add(new FontInfo(font));
+                    }
+                }
+                Collections.sort(mFontInfo);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Error in populating list");
+            }
+
+            for (FontInfo availableFont : mFontInfo) {
+                if (fontId.equals(availableFont.fontName.toLowerCase())) {
+                    Typeface.Builder fontBuilder = new Typeface.Builder(availableFont.previewPath);
+                    Typeface tf = fontBuilder.build();
+                    builder.addOverlayPackage(OVERLAY_CATEGORY_FONT,
+                            fontId)
+                            .setOverallFont(tf);
+                }
+            }
         } else {
             addSystemDefaultFont(builder);
         }
@@ -249,15 +281,10 @@ class OverlayThemeExtractor {
     }
 
     void addSystemDefaultFont(Builder builder) {
-        Resources system = Resources.getSystem();
-        String headlineFontFamily = system.getString(system.getIdentifier(
-                ResourceConstants.CONFIG_HEADLINE_FONT_FAMILY, "string",
-                ResourceConstants.ANDROID_PACKAGE));
-        String bodyFontFamily = system.getString(system.getIdentifier(
-                ResourceConstants.CONFIG_BODY_FONT_FAMILY,
-                "string", ResourceConstants.ANDROID_PACKAGE));
-        builder.setHeadlineFontFamily(Typeface.create(headlineFontFamily, Typeface.NORMAL))
-                .setBodyFontFamily(Typeface.create(bodyFontFamily, Typeface.NORMAL));
+        FontInfo defaultFont = FontInfo.getDefaultFontInfo();
+        Typeface.Builder fontBuilder = new Typeface.Builder(defaultFont.previewPath);
+        Typeface tf = fontBuilder.build();
+        builder.setOverallFont(tf);
     }
 
     Typeface loadTypeface(String configName, String fontOverlayPackage)

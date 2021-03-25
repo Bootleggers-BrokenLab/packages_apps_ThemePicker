@@ -172,10 +172,10 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
             }
 
             try {
-                String fontOverlayPackage = getOverlayPackage(FONT_PREFIX, themeName);
-                mOverlayProvider.addFontOverlay(builder, fontOverlayPackage);
+                String fontID = getOverlayPackage(FONT_PREFIX, themeName);
+                mOverlayProvider.addFontById(builder, fontID);
             } catch (NameNotFoundException | NotFoundException e) {
-                Log.d(TAG, "Didn't find font overlay for theme, will use system default");
+                Log.d(TAG, "Didn't find font for theme, will use system default");
                 mOverlayProvider.addSystemDefaultFont(builder);
             }
 
@@ -273,8 +273,8 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
         }
 
         try {
-            String fontOverlayPackage = getOverlayPackage(FONT_PREFIX, DEFAULT_THEME_NAME);
-            mOverlayProvider.addFontOverlay(builder, fontOverlayPackage);
+            String fontName = getOverlayPackage(FONT_PREFIX, DEFAULT_THEME_NAME);
+            mOverlayProvider.addFontById(builder, fontName);
         } catch (NameNotFoundException | NotFoundException e) {
             Log.d(TAG, "Didn't find font overlay for default theme, will use system default");
             mOverlayProvider.addSystemDefaultFont(builder);
@@ -463,7 +463,7 @@ public class DefaultThemeProvider extends ResourcesApkProvider implements ThemeB
         }
         mOverlayProvider.addShapeOverlay(builder,
                 customPackages.get(OVERLAY_CATEGORY_SHAPE));
-        mOverlayProvider.addFontOverlay(builder,
+        mOverlayProvider.addFontById(builder,
                 customPackages.get(OVERLAY_CATEGORY_FONT));
         mOverlayProvider.addColorOverlay(builder,
                 customPackages.get(OVERLAY_CATEGORY_COLOR));

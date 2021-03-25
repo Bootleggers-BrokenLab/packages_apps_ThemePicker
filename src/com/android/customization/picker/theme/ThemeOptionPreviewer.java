@@ -161,8 +161,7 @@ class ThemeOptionPreviewer implements LifecycleObserver {
 
     /** Loads the Theme option preview into the container view. */
     public void setPreviewInfo(PreviewInfo previewInfo) {
-        setHeadlineFont(previewInfo.headlineFontFamily);
-        setBodyFont(previewInfo.bodyFontFamily);
+        setOverallFont(previewInfo.overallFontFamily);
         setTopBarIcons(previewInfo.icons);
         setAppIconShape(previewInfo.shapeAppIcons);
         setColorAndIconsSection(previewInfo.icons, previewInfo.shapeDrawable,
@@ -252,20 +251,18 @@ class ThemeOptionPreviewer implements LifecycleObserver {
         }
     }
 
-    private void setHeadlineFont(Typeface headlineFont) {
-        mStatusBarClock.setTypeface(headlineFont);
-        mSmartSpaceDate.setTypeface(headlineFont);
+    private void setOverallFont(Typeface overallFont) {
+        mStatusBarClock.setTypeface(overallFont);
+        mSmartSpaceDate.setTypeface(overallFont);
 
         // Update font of color/icons section title.
         TextView colorIconsSectionTitle = mContentView.findViewById(R.id.color_icons_section_title);
-        colorIconsSectionTitle.setTypeface(headlineFont);
-    }
+        colorIconsSectionTitle.setTypeface(overallFont);
 
-    private void setBodyFont(Typeface bodyFont) {
         // Update font of app names.
         for (int id : mShapeIconAppNameIds) {
             TextView appName = mContentView.findViewById(id);
-            appName.setTypeface(bodyFont);
+            appName.setTypeface(overallFont);
         }
     }
 
