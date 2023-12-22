@@ -67,6 +67,9 @@ public interface ResourceConstants {
     String OVERLAY_CATEGORY_ICON_SYSUI = "android.theme.customization.icon_pack.systemui";
     String OVERLAY_CATEGORY_ICON_LAUNCHER = "android.theme.customization.icon_pack.launcher";
     String OVERLAY_CATEGORY_ICON_THEMEPICKER = "android.theme.customization.icon_pack.themepicker";
+    String OVERLAY_CATEGORY_UI_STYLE_ANDROID = "android.theme.customization.style.android";
+    String OVERLAY_CATEGORY_UI_STYLE_SETTINGS = "android.theme.customization.style.settings";
+    String OVERLAY_CATEGORY_UI_STYLE_SYSUI = "android.theme.customization.style.systemui";
 
     /**
      * Global Android theme category (default theme prebundled with the OS)
@@ -101,6 +104,14 @@ public interface ResourceConstants {
     ArrayList<String> sTargetPackages = new ArrayList<>();
     String ACCENT_COLOR_LIGHT_NAME = "accent_device_default_light";
     String ACCENT_COLOR_DARK_NAME = "accent_device_default_dark";
+
+    /**
+     * Color resources for UI Styles
+     */
+    String UI_STYLE_PRIMARY_COLOR_LIGHT_BACKGROUND = "system_neutral1_150";
+    String UI_STYLE_PRIMARY_COLOR_DARK_BACKGROUND = "system_neutral1_800";
+    String UI_STYLE_BACKGROUND_COLOR_LIGHT_NAME = "system_neutral1_100";
+    String UI_STYLE_BACKGROUND_COLOR_DARK_NAME = "system_neutral1_900";
 
     float PATH_SIZE = 100f;
 

@@ -22,6 +22,8 @@ import com.android.customization.model.themedicon.ThemedIconSectionController;
 import com.android.customization.model.themedicon.ThemedIconSwitchProvider;
 import com.android.customization.model.themedicon.domain.interactor.ThemedIconInteractor;
 import com.android.customization.model.themedicon.domain.interactor.ThemedIconSnapshotRestorer;
+import com.android.customization.model.uistyle.UIStyleManager;
+import com.android.customization.model.uistyle.UIStyleSectionController;
 import com.android.customization.picker.clock.ui.view.ClockViewFactory;
 import com.android.customization.picker.clock.ui.viewmodel.ClockCarouselViewModel;
 import com.android.customization.picker.color.domain.interactor.ColorPickerInteractor;
@@ -209,6 +211,11 @@ public final class DefaultCustomizationSections implements CustomizationSections
                                 sectionNavigationController,
                                 lifecycleOwner,
                                 /* isRevampedUiEnabled= */ true));
+
+                // UI style selection section.
+                sectionControllers.add(new UIStyleSectionController(
+                        UIStyleManager.getInstance(activity, new OverlayManagerCompat(activity)),
+                        sectionNavigationController));
 
                 // Icon pack selection section.
                 sectionControllers.add(new IconPackSectionController(
