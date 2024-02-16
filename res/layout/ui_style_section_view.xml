@@ -34,6 +34,7 @@
         android:layout_width="@dimen/option_tile_width"
         android:layout_height="@dimen/option_tile_width"
         android:scaleType="center"
+        android:tint="@color/system_on_surface"
         android:background="@drawable/picker_section_icon_background"/>
 
 </com.android.customization.picker.uistyle.UIStyleSectionView>

@@ -92,9 +92,9 @@ public class UIStyleOption implements CustomizationOption<UIStyleOption> {
                 ColorStateList.valueOf(color));
         unselectedOption.setTintList(ColorStateList.valueOf(color));
         StateListDrawable stateListDrawable = new StateListDrawable();
-        stateListDrawable.addState(new int[] {android.R.attr.textColorPrimary}, selectedOption);
+        stateListDrawable.addState(new int[] {R.color.system_on_surface}, selectedOption);
         stateListDrawable.addState(
-                new int[] {-android.R.attr.textColorTertiary}, unselectedOption);
+                new int[] {R.color.system_on_surface_variant}, unselectedOption);
         int resId = R.id.ui_style_section_tile;
         if (view.findViewById(R.id.option_icon) != null) {
             resId = R.id.option_icon;
